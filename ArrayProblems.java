@@ -25,7 +25,15 @@ class ArrayProblems{
         int[] arr7 = {5,1,2,-6,-8,2};
         //System.out.print(maxSubArraySum(arr7));
         int[] arr8 = {1,2,3,4,5,7,8,9,10,12};
-        System.out.println(maxEvenOdd(arr8));
+        //System.out.println(maxEvenOdd(arr8));
+        int[] arr9 = {8,-4,3,-5,4};
+        //System.out.print(maximumCircularSubArraySum(arr9));
+        int[] arr10 = {1,1,2,3,2,1,1};
+        //System.out.print(majorityElementInArray(arr10));
+        int[] arr11= {1,1,0,0,0,1,1,0,0,1,1,1};
+        //minimumGroupFlipsToMakeSame(arr11);
+        int[] arr12 = {1,8,30,-5,20,7};
+        System.out.print(findMaxSubArraSumOfLengthK(arr12,3));
     }
 
     public static int largestElementInArray(int[] arr){
@@ -204,7 +212,7 @@ class ArrayProblems{
         return res;
     }
 
-    public static int maxSubArraySum(int[] arr){
+    public static int maxSubArraySum(int[] arr){ //Kadane's algo
         int maxending = arr[0], res = arr[0];
         for(int i = 1; i<arr.length; i++){
             maxending = Math.max(maxending+arr[i],arr[i]);
@@ -226,5 +234,69 @@ class ArrayProblems{
         return res;
     }
 
-    
+    public static int maximumCircularSubArraySum(int[] arr){
+        int maxnormalsum = maxSubArraySum(arr);
+        if(maxnormalsum<0)
+            return maxnormalsum;
+        int arrsum = 0;
+        for(int i=0;i<arr.length;i++){
+            arrsum+=arr[i];
+            arr[i]=((-1)*arr[i]);
+        }
+        int maxcircular = arrsum+maxSubArraySum(arr);
+        return Math.max(maxcircular,maxnormalsum);
+    }
+
+    public static int majorityElementInArray(int[] arr){
+        //An element is majority if it appears more than n/2 times where n is length of array
+
+        //Moore's Morting algo
+        //This algo may not always give the first occurence of majority element
+        int res = 0,count = 1;
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]==arr[res])
+                count++;
+            else   
+                count--;
+            if(count==0){
+                res = i; count=1;
+            }
+       }
+       count = 0;
+       for(int i=0;i<arr.length;i++){
+            if(arr[i]==arr[res])
+                count++;
+       }
+       if(count > (arr.length/2))
+            return arr[res];
+        return -1;
+    }
+
+    public static void minimumGroupFlipsToMakeSame(int[] arr){
+        //we can do all same consecutive elements flip in one step
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]!=arr[i-1]){
+                if(arr[i]!=arr[0])
+                    System.out.print("From "+i+" to ");
+                else
+                    System.out.println(i-1);
+            }
+        }
+        if(arr[arr.length-1]!=arr[0])
+            System.out.print(arr.length-1);
+    }
+
+    public static int findMaxSubArraSumOfLengthK(int[] arr,int k){
+        //window sliding technique
+        int currsum=0;
+        for(int i=0;i<k;i++){
+            currsum+=arr[i];
+        }
+        int maxsum=currsum;
+        for(int i=k;i<arr.length;i++){
+            currsum+=(arr[i]-arr[i-k]);
+            maxsum=Math.max(maxsum,currsum);
+        }
+        return maxsum;
+    }
 }
