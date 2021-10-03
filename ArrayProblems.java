@@ -1,3 +1,4 @@
+import java.util.*;
 class ArrayProblems{
     public static void main(String[] args) {
         int[] arr = {2,3,5,8,46,46,8};
@@ -33,7 +34,11 @@ class ArrayProblems{
         int[] arr11= {1,1,0,0,0,1,1,0,0,1,1,1};
         //minimumGroupFlipsToMakeSame(arr11);
         int[] arr12 = {1,8,30,-5,20,7};
-        System.out.print(findMaxSubArraSumOfLengthK(arr12,3));
+        //System.out.print(findMaxSubArraSumOfLengthK(arr12,3));
+        int[] arr13={1,4,20,3,10,5};
+        //System.out.print(findSubArrayWithGivenSum(arr13,33));
+        int arr14[] = { 1, 2, 1, 3, 4, 2, 3 };
+        countDistinctElementsInWindowOfSizek(arr14,4);
     }
 
     public static int largestElementInArray(int[] arr){
@@ -298,5 +303,42 @@ class ArrayProblems{
             maxsum=Math.max(maxsum,currsum);
         }
         return maxsum;
+    }
+
+    public static boolean findSubArrayWithGivenSum(int[] arr, int sum){
+        //this window sliding technique works only if array contains non negative integers
+        int currsum = arr[0],start = 0;
+        for(int end=1;end<arr.length;end++){
+            while(currsum>sum && start<end){
+                currsum-=arr[start];
+                start++;
+            }
+            if(currsum==sum)
+                return true;
+            currsum+=arr[end];
+        }
+        return (currsum==sum);
+    }
+
+    public static void countDistinctElementsInWindowOfSizek(int[] arr, int k){
+        HashMap<Integer, Integer> hm= new HashMap<Integer, Integer>();
+        for(int i=0;i<k;i++){
+            if(hm.containsKey(arr[i]))
+                hm.put(arr[i],hm.get(arr[i])+1);
+            else
+                hm.put(arr[i],1);
+        }
+        System.out.print(hm.size()+" ");
+        for(int i=k;i<arr.length;i++){
+            if(hm.get(arr[i-k])==1)
+                hm.remove(arr[i-k]);
+            else
+                hm.put(arr[i-k],hm.get(arr[i-k])-1);
+            if(hm.containsKey(arr[i]))
+                hm.put(arr[i],hm.get(arr[i])+1);
+            else
+                hm.put(arr[i],1);
+            System.out.print(hm.size()+" ");
+        }
     }
 }
