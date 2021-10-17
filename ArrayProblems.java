@@ -38,7 +38,11 @@ class ArrayProblems{
         int[] arr13={1,4,20,3,10,5};
         //System.out.print(findSubArrayWithGivenSum(arr13,33));
         int arr14[] = { 1, 2, 1, 3, 4, 2, 3 };
-        countDistinctElementsInWindowOfSizek(arr14,4);
+        //countDistinctElementsInWindowOfSizek(arr14,4);
+        int[] arr15 = {2,8,3,9,6,5,4};
+        //getSum(arr15);
+        int[] arr16={3,4,8,-9,20,6};
+        System.out.print(hasEquilibriumPoint(arr16));
     }
 
     public static int largestElementInArray(int[] arr){
@@ -340,5 +344,35 @@ class ArrayProblems{
                 hm.put(arr[i],1);
             System.out.print(hm.size()+" ");
         }
+    }
+
+    //prefix sum technique
+    public static void getSum(int[] arr){
+        //preprocessing with O(n) complexity
+        int[] prefix = new int[arr.length];
+        prefix[0] = arr[0];
+        for(int i=1;i<arr.length;i++){
+            prefix[i]=prefix[i-1]+arr[i];
+        }
+        int l=1,r=3;
+        if(l!=0)
+            System.out.print(prefix[r]-prefix[l-1]);
+        else
+            System.out.print(prefix[r]);
+    }
+
+    public static boolean hasEquilibriumPoint(int[] arr){
+        // An equilibrium point is a point where left sum of element = right side sum
+        int sum=0;
+        for(int i:arr)
+            sum+=i;
+        int lsum=0;
+        for(int i=0;i<arr.length;i++){
+            if(lsum == sum-arr[i])
+                return true;
+            lsum+=arr[i];
+            sum-=arr[i];
+        }
+        return false;
     }
 }
